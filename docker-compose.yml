@@ -1,0 +1,50 @@
+version: '3.4'
+
+networks:
+  server:
+    driver: bridge
+
+services:
+  itemlistapi:
+    networks:
+      - server
+    image: itemlistapi
+    build:
+      context: api
+      dockerfile: ./Dockerfile
+    ports:
+      - 4000:4000
+    restart: always
+    depends_on: 
+      - mongo
+    volumes:
+      - ./api:/usr/src/app
+    environment: 
+      - MONGODB_URI=mongo/webstore
+      - PORT=4000
+      - SOURCE=<Your local ip, ie: http://192.168.1.21>
+
+  itemlistclient:
+    networks:
+      - server
+    restart: always
+    build:
+      context: client
+      dockerfile: ./Dockerfile
+    links:
+      - itemlistapi
+    depends_on:
+      - itemlistapi
+    ports:
+      - 80:80
+  
+  mongo:
+    networks:
+      - server
+    image: mongo:4.2-bionic
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./.data/mongo:/data/db
+    command: mongod --quiet --logpath=/dev/null

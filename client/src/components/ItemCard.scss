@@ -1,0 +1,28 @@
+.card-wrapper {
+  width: 400px;
+
+  &.card-list-view {
+    width: 600px;
+  }
+}
+
+.card-actions {
+  justify-content: space-between;
+}
+
+.card-numerical-values-container {
+  display: flex;
+  justify-self: flex-start;
+}
+
+.card-numerical-value {
+  margin-right: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.numerical-value-label {
+  text-align: center;
+}

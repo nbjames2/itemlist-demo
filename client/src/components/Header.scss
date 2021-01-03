@@ -1,0 +1,22 @@
+.AppBar {
+  flex-direction: row;
+}
+
+.Box {
+  display: flex
+}
+
+.nav-link {
+  color: inherit;
+  text-decoration: none;
+  width: max-content;
+  padding-left: 8px;
+
+  &.active {
+    text-decoration: underline;
+  }
+
+  &.logout-button {
+    width: 90px;
+  }
+}

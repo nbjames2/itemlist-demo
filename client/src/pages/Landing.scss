@@ -1,0 +1,17 @@
+.main-body-container {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.floating-button {
+  position: fixed !important;
+  bottom: 16px;
+  right: 16px;
+}
+
+.new-item-button-wrapper {
+  margin: 16px;
+  align-self: flex-end
+}

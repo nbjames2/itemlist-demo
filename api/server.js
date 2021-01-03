@@ -1,43 +1,30 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-// const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 require('dotenv').config();
+const auth = require('./middleware/auth');
 const port = process.env.PORT || 4000;
 
 // init (app, express) {
 app.disable('x-powered-by');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '2MB' }));
-// app.use(bodyParser.urlencoded({ extended: true }));
+
 // set up database
-// const connectionString = `${process.env.MONGODB_URI}`;
-// mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-// db.once('open', () => console.log('connected to the database'));
-// app.use(cookieParser());
+const connectionString = `mongodb://${process.env.MONGODB_URI}`;
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => console.log('connected to the database'));
 
-// set up session
-// app.use(session({
-//   secret: process.env.SESS_SECRET,
-//   resave: false,
-//   saveUninitialized: true,
-//   store: new MongoStore({
-//     mongooseConnection: db
-//   }),
-//   cookie: {
-//     maxAge: 1000 * 60 * 60 * 2
-//   }
-// }));
-
-// app.use(express.static(__dirname + 'public'));
-// }
 app.use(cors({
-  origin: 'http://itemlist.bairdjames.com',
+  origin: process.env.SOURCE,
   credentials: true,
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
 }));
+app.options('*', cors());
+app.use('/', auth);
 app.use('/', require('./routes'));
 // app.use(express.static('src/assets'));
 app.listen(port, () => {
